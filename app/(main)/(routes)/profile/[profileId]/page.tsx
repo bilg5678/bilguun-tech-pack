@@ -5,7 +5,7 @@ type Props = {
 };
 
 const ProfilePage = (props: Props) => {
-  return <div>{props.params.profileId}</div>;
+  return <div>{props.params.profileId} user</div>;
 };
 
 export default ProfilePage;
