@@ -24,17 +24,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { FileUpload } from "./file-upload";
+import { registerSchema } from "@/lib/zodSchema/schemas";
 const InitialModal = () => {
   const [isMounted, setIsMounted] = useState(false);
-  const formSchema = z.object({
-    identityCard: z.string().min(1, {
-      message: "Identity card image is required.",
-    }),
-    selfie: z.string().min(1, {
-      message: "Selfie image is required.",
-    }),
-  });
-
   const router = useRouter();
 
   useEffect(() => {
@@ -42,14 +34,25 @@ const InitialModal = () => {
   }, []);
 
   const form = useForm({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(registerSchema),
     defaultValues: {
       identityCard: "",
       selfie: "",
     },
   });
   const isLoading = form.formState.isLoading;
-
+  const onSubmit = async (values: z.infer<typeof registerSchema>) => {
+    const images = Object.values(values);
+    await axios({
+      method: "post",
+      url: "https://xpjicxupyd.execute-api.us-east-1.amazonaws.com/dev/getPreSignedUrl",
+      data: {
+        folderPath: "identityCard/",
+        bucketName: "bilguun-tech-bucket",
+        contentType: "image/jpeg",
+      },
+    }).then((res) => console.log(res));
+  };
   if (!isMounted) {
     return null;
   }
@@ -66,7 +69,7 @@ const InitialModal = () => {
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form className="space-y-8">
+          <form className="space-y-8" onSubmit={form.handleSubmit(onSubmit)}>
             <div className="space-y-8 px-6">
               <div className="flex items-center justify-center text-center">
                 <FormField
@@ -74,6 +77,10 @@ const InitialModal = () => {
                   name="identityCard"
                   render={({ field }) => (
                     <FormItem>
+                      <FormLabel className="uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70">
+                        Иргэний үнэмлэхний зураг
+                      </FormLabel>
+
                       <FormControl>
                         <FileUpload
                           value={field.value}
@@ -86,26 +93,26 @@ const InitialModal = () => {
                 />
               </div>
 
-              <FormField
-                control={form.control}
-                name="selfie"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70">
-                      Server name
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        disabled={isLoading}
-                        className="bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0"
-                        placeholder="Enter server name"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="flex items-center justify-center text-center">
+                <FormField
+                  control={form.control}
+                  name="selfie"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70">
+                        Селфи зураг
+                      </FormLabel>
+                      <FormControl>
+                        <FileUpload
+                          value={field.value}
+                          onChange={field.onChange}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
             <DialogFooter className="bg-gray-100 px-6 py-4">
               <Button disabled={isLoading}>Create</Button>
