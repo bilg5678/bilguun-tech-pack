@@ -7,6 +7,7 @@ import Image from "next/image";
 type Props = {
   value: any;
   onChange: (value?: any) => void;
+  isLoading: boolean;
 };
 
 export const FileUpload = (props: Props) => {
@@ -16,7 +17,7 @@ export const FileUpload = (props: Props) => {
   }>();
 
   const onDrop = useCallback((acceptedFiles: Array<File>) => {
-    const file = acceptedFiles[0];
+    const file = acceptedFiles[0] || props.value;
     setImage({ url: URL.createObjectURL(file) as string, file });
     props.onChange(file);
   }, []);
@@ -43,19 +44,13 @@ export const FileUpload = (props: Props) => {
           className="rounded-md absolute top-0 left-0 w-24 h-24"
         />
         <button
+          disabled={props.isLoading}
           onClick={() => props.onChange("")}
           className="bg-rose-500 text-white p-1 rounded-full absolute top-0 right-0 shadow-sm"
           type="button"
         >
           <X className="w-4 h-4" />
         </button>
-        <Button
-          type="button"
-          onClick={onSubmit}
-          className="absolute bottom-4 left-24"
-        >
-          Зураг явуулах
-        </Button>
       </div>
     );
   }
