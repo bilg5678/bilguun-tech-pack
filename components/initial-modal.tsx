@@ -163,7 +163,9 @@ const InitialModal = () => {
                     <Stepper steps={steps} activeStep={activeStep} />
                   </div>
                 ) : (
-                  <Button disabled={isLoading}>Үргэлжлүүлэх</Button>
+                  <Button className="mx-6" disabled={isLoading}>
+                    Үргэлжлүүлэх
+                  </Button>
                 )}
               </CardFooter>
             </form>
