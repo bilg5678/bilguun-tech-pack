@@ -52,8 +52,6 @@ const InitialModal = () => {
   });
   const isLoading = form.formState.isSubmitting;
   const onSubmit = async (values: z.infer<typeof registerSchema>) => {
-    setActiveStep(0);
-    Modal.show(<Stepper activeStep={activeStep} steps={steps} />);
     const images: Array<File> = Object.values(values);
     const id = uuidv4();
     await uploadFile(
@@ -65,6 +63,7 @@ const InitialModal = () => {
       },
       images[0],
     );
+    setActiveStep(1);
     await uploadFile(
       {
         folderPath: SELFIE_PATH,
@@ -73,7 +72,8 @@ const InitialModal = () => {
         id,
       },
       images[1],
-    ).then(() => setActiveStep(1));
+    );
+    setActiveStep(2);
     try {
       const getResultInfo = await axios.post(
         process.env.NEXT_PUBLIC_AWS_BASE_URL + "/getResult",
@@ -82,7 +82,6 @@ const InitialModal = () => {
           targetPath: `selfie/${id}.${images[1].type.split("/")[1]}`,
         },
       );
-      setActiveStep(2);
       toast.success("Амжилттай");
       Modal.close();
       Modal.show(<ProfileInfo profile={getResultInfo.data.data} />);
@@ -157,7 +156,11 @@ const InitialModal = () => {
                 </div>
               </div>
               <CardFooter className="bg-gray-100 px-6 py-4">
-                <Button disabled={isLoading}>Create</Button>
+                {isLoading ? (
+                  <Stepper steps={steps} activeStep={activeStep} />
+                ) : (
+                  <Button disabled={isLoading}>Create</Button>
+                )}
               </CardFooter>
             </form>
           </Form>
