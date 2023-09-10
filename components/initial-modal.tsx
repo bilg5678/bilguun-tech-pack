@@ -96,7 +96,7 @@ const InitialModal = () => {
     return null;
   }
   return (
-    <div className="flex justify-center items-center">
+    <div className="flex justify-center items-center h-5/6">
       <Card className="w-5/6 md:w-[500px]">
         <CardContent className="bg-white text-black p-0 overflow-hidden">
           <CardHeader className="pt-8 px-6">
@@ -156,14 +156,14 @@ const InitialModal = () => {
                   />
                 </div>
               </div>
-              <CardFooter className="bg-gray-100 px-6 py-4">
+              <CardFooter className="bg-gray-100 py-4 px-0">
                 {isLoading ? (
-                  <div className="flex justify-center items-center flex-col">
+                  <div className="flex justify-center items-center flex-col w-full">
                     <Label>Та түр хүлээнэ үү</Label>
                     <Stepper steps={steps} activeStep={activeStep} />
                   </div>
                 ) : (
-                  <Button disabled={isLoading}>Create</Button>
+                  <Button disabled={isLoading}>Үргэлжлүүлэх</Button>
                 )}
               </CardFooter>
             </form>
