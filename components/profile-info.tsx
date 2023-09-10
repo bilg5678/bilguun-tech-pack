@@ -16,6 +16,7 @@ import toast from "react-hot-toast";
 import { Avatar } from "./avatar";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Loader2 } from "lucide-react";
 type Props = {
   profile: Profile;
 };
@@ -74,9 +75,15 @@ export function ProfileInfo({ profile }: Props) {
         <Button disabled={loading} onClick={onCancel} variant="outline">
           Болих
         </Button>
-        <Button disabled={loading} onClick={onSubmit}>
-          Үргэлжлүүлэх
-        </Button>
+        {loading ? (
+          <Button size="icon">
+            <Loader2 className="animate-spin" />
+          </Button>
+        ) : (
+          <Button disabled={loading} onClick={onSubmit}>
+            Үргэлжлүүлэх
+          </Button>
+        )}
       </CardFooter>
     </Card>
   );

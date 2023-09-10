@@ -30,6 +30,7 @@ import {
   CardTitle,
 } from "./ui/card";
 import { BUCKET_NAME, IDENTITY_CARD_PATH, SELFIE_PATH } from "@/constant";
+import { Label } from "./ui/label";
 const InitialModal = () => {
   const [isMounted, setIsMounted] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
@@ -157,7 +158,10 @@ const InitialModal = () => {
               </div>
               <CardFooter className="bg-gray-100 px-6 py-4">
                 {isLoading ? (
-                  <Stepper steps={steps} activeStep={activeStep} />
+                  <div className="flex justify-center items-center flex-col">
+                    <Label>Та түр хүлээнэ үү</Label>
+                    <Stepper steps={steps} activeStep={activeStep} />
+                  </div>
                 ) : (
                   <Button disabled={isLoading}>Create</Button>
                 )}
