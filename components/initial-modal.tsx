@@ -53,6 +53,7 @@ const InitialModal = () => {
   });
   const isLoading = form.formState.isSubmitting;
   const onSubmit = async (values: z.infer<typeof registerSchema>) => {
+    setActiveStep(0);
     const images: Array<File> = Object.values(values);
     const id = uuidv4();
     await uploadFile(
